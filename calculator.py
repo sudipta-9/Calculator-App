@@ -1,70 +1,80 @@
-import math
+import tkinter as tk
+from tkinter import ttk
+from math import *
 
-def add(a, b):
-  return a + b
+class Calculator:
+    def __init__(self, root):
+        self.root = root
+        self.expression = ""
+        self.display = tk.Entry(root, width=30, font=("Helvetica", 20))
+        self.display.grid(row=0, column=0, columnspan=4)
 
-def subtract(a, b):
-  return a - b
+        # Create buttons for the numbers 0-9
+        for i in range(10):
+            btn = ttk.Button(root, text=str(i), command=lambda x=i: self.add_number(x))
+            btn.grid(row=i+1, column=0)
 
-def multiply(a, b):
-  return a * b
+        # Create buttons for the mathematical operations
+        btn_add = ttk.Button(root, text="+", command=self.add)
+        btn_subtract = ttk.Button(root, text="-", command=self.subtract)
+        btn_multiply = ttk.Button(root, text="*", command=self.multiply)
+        btn_divide = ttk.Button(root, text="/", command=self.divide)
+        btn_clear = ttk.Button(root, text="Clear", command=self.clear)
+        btn_equal = ttk.Button(root, text="=", command=self.evaluate)
 
-def divide(a, b):
-  return a / b
+        btn_add.grid(row=1, column=1)
+        btn_subtract.grid(row=1, column=2)
+        btn_multiply.grid(row=1, column=3)
+        btn_divide.grid(row=2, column=1)
+        btn_clear.grid(row=2, column=2)
+        btn_equal.grid(row=2, column=3)
 
-def power(a, b):
-  return math.pow(a, b)
+    def add_number(self, number):
+        self.expression += str(number)
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
 
-def square_root(a):
-  return math.sqrt(a)
+    def add(self):
+        self.expression += "+"
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
 
-def log(a, b):
-  return math.log(a, b)
+    def subtract(self):
+        self.expression += "-"
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
 
-def main():
-  print("Welcome to the professional calculator!")
+    def multiply(self):
+        self.expression += "*"
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
 
-  while True:
-    print("What would you like to do? (1) Add (2) Subtract (3) Multiply (4) Divide (5) Power (6) Square root (7) Logarithm")
+    def divide(self):
+        self.expression += "/"
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
 
-    choice = input("Enter your choice: ")
+    def power(self):
+            self.expression += "^"
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.expression)
 
-    if choice == "1":
-      a = float(input("Enter the first number: "))
-      b = float(input("Enter the second number: "))
-      print(f"{a} + {b} = {add(a, b)}")
+    def clear(self):
+        self.expression = ""
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
 
-    elif choice == "2":
-      a = float(input("Enter the first number: "))
-      b = float(input("Enter the second number: "))
-      print(f"{a} - {b} = {subtract(a, b)}")
+    def evaluate(self):
+        try:
+            result = eval(self.expression)
+            self.display.delete(0, tk.END)
+            self.display.insert(0, result)
+        except Exception as e:
+            self.display.delete(0, tk.END)
+            self.display.insert(0, "Error: " + str(e))
 
-    elif choice == "3":
-      a = float(input("Enter the first number: "))
-      b = float(input("Enter the second number: "))
-      print(f"{a} * {b} = {multiply(a, b)}")
 
-    elif choice == "4":
-      a = float(input("Enter the first number: "))
-      b = float(input("Enter the second number: "))
-      print(f"{a} / {b} = {divide(a, b)}")
-
-    elif choice == "5":
-      a = float(input("Enter the base number: "))
-      b = float(input("Enter the exponent: "))
-      print(f"{a} ^ {b} = {power(a, b)}")
-
-    elif choice == "6":
-      a = float(input("Enter the number: "))
-      print(f"The square root of {a} is {square_root(a)}")
-
-    elif choice == "7":
-      a = float(input("Enter the number: "))
-      b = float(input("Enter the base: "))
-      print(f"The logarithm of {a} to the base {b} is {log(a, b)}")
-
-    else:
-      print("Invalid choice.")
-
-if __name__ == "__main__":
-  main()
+root = tk.Tk()
+root.title("Calculator")
+calc = Calculator(root)
+root.mainloop()
